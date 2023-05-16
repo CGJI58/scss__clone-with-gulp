@@ -16,9 +16,9 @@
     "build": "gulp build"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
     "@babel/core": "^7.21.8",
-    "@babel/register": "^7.21.0"
-  },
-  "dependencies": {}
+    "@babel/register": "^7.21.0",
+    "gulp": "^4.0.2",
+    "gulp-pug": "^5.0.0"
+  }
 }
