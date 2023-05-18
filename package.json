@@ -19,7 +19,8 @@
     "@babel/core": "^7.21.8",
     "@babel/register": "^7.21.0",
     "gulp": "^4.0.2",
-    "gulp-pug": "^5.0.0"
+    "gulp-pug": "^5.0.0",
+    "gulp-webserver": "^0.9.1"
   },
   "dependencies": {
     "del": "^6.1.1"
