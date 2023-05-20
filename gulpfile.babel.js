@@ -6,6 +6,7 @@ import dartSass from "sass";
 import gulpSass from "gulp-sass";
 import autoPrefixer from "gulp-autoprefixer";
 import csso from "gulp-csso";
+import ghPages from "gulp-gh-pages";
 
 const sass = gulpSass(dartSass);
 
@@ -20,7 +21,13 @@ const routes = {
     src: "src/scss/style.scss",
     dest: "build/css/",
   },
+  deploy: {
+    src: "build/**/*",
+    publish: "./.publish",
+  },
 };
+
+const cleanBuild = () => del([routes.pug.dest]);
 
 const handlePugs = () => {
   return gulp
@@ -37,8 +44,6 @@ const handleStyles = () =>
     .pipe(autoPrefixer({ overrideBrowserslist: ["last 2 versions"] }))
     .pipe(gulp.dest(routes.scss.dest));
 
-const clean = () => del([routes.pug.dest]);
-
 const webserver = () =>
   gulp.src(routes.pug.dest).pipe(ws({ livereload: true, open: true }));
 
@@ -47,10 +52,12 @@ const watch = () => {
   gulp.watch(routes.scss.watch, handleStyles);
 };
 
-const prepare = gulp.series([clean]);
+const ghDeploy = () => gulp.src(routes.deploy.src).pipe(ghPages());
+const postDeploy = () => del(routes.deploy.publish);
 
 const assets = gulp.series([handlePugs, handleStyles]);
-
 const postDev = gulp.parallel([webserver, watch]);
 
-export const dev = gulp.series([prepare, assets, postDev]);
+export const build = gulp.series([cleanBuild, assets]);
+export const dev = gulp.series([build, postDev]);
+export const deploy = gulp.series([build, ghDeploy, postDeploy]);
