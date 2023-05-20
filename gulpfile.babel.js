@@ -5,6 +5,7 @@ import ws from "gulp-webserver";
 import dartSass from "sass";
 import gulpSass from "gulp-sass";
 import autoPrefixer from "gulp-autoprefixer";
+import csso from "gulp-csso";
 
 const sass = gulpSass(dartSass);
 
@@ -32,6 +33,7 @@ const handleStyles = () =>
   gulp
     .src(routes.scss.src)
     .pipe(sass().on("error", sass.logError))
+    .pipe(csso())
     .pipe(autoPrefixer({ overrideBrowserslist: ["last 2 versions"] }))
     .pipe(gulp.dest(routes.scss.dest));
 
