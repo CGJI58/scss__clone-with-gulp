@@ -25,6 +25,7 @@
     "sass": "^1.62.1"
   },
   "dependencies": {
-    "del": "^6.1.1"
+    "del": "^6.1.1",
+    "gulp-autoprefixer": "^8.0.0"
   }
 }
