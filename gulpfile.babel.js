@@ -7,6 +7,7 @@ import gulpSass from "gulp-sass";
 import autoPrefixer from "gulp-autoprefixer";
 import csso from "gulp-csso";
 import ghPages from "gulp-gh-pages";
+import gulpImg from "gulp-image";
 
 const sass = gulpSass(dartSass);
 
@@ -21,6 +22,10 @@ const routes = {
     src: "src/scss/style.scss",
     dest: "build/css/",
   },
+  img: {
+    src: "src/img/*",
+    dest: "build/img",
+  },
   deploy: {
     src: "build/**/*",
     publish: "./.publish",
@@ -31,7 +36,7 @@ const cleanBuild = () => del([routes.pug.dest]);
 
 const handlePugs = () => {
   return gulp
-    .src(routes.pug.src) // 새로고침 되려면 index.pug 저장을 눌러야만 함
+    .src(routes.pug.watch)
     .pipe(gulpPug())
     .pipe(gulp.dest(routes.pug.dest));
 };
@@ -44,6 +49,9 @@ const handleStyles = () =>
     .pipe(autoPrefixer({ overrideBrowserslist: ["last 2 versions"] }))
     .pipe(gulp.dest(routes.scss.dest));
 
+const handleImages = () =>
+  gulp.src(routes.img.src).pipe(gulpImg()).pipe(gulp.dest(routes.img.dest));
+
 const webserver = () =>
   gulp.src(routes.pug.dest).pipe(ws({ livereload: true, open: true }));
 
@@ -55,9 +63,10 @@ const watch = () => {
 const ghDeploy = () => gulp.src(routes.deploy.src).pipe(ghPages());
 const postDeploy = () => del(routes.deploy.publish);
 
+const prepare = gulp.series([cleanBuild, handleImages]);
 const assets = gulp.series([handlePugs, handleStyles]);
 const postDev = gulp.parallel([webserver, watch]);
 
-export const build = gulp.series([cleanBuild, assets]);
+export const build = gulp.series([prepare, assets]);
 export const dev = gulp.series([build, postDev]);
 export const deploy = gulp.series([build, ghDeploy, postDeploy]);
