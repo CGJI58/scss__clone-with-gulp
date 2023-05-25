@@ -11,7 +11,7 @@ body {
     font-size: 34px;
     color: whitesmoke;
     text-align: center;
-    margin-top: 20px;
+    margin: 30px 0;
   }
   section {
     width: 100%;
@@ -19,8 +19,8 @@ body {
     height: 100%;
     min-height: 600px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, 200px);
+    grid-template-rows: repeat(auto-fit, 100px);
     box-sizing: border-box;
     padding: 20px;
     gap: 20px;
